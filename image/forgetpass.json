@@ -1,0 +1,76 @@
+{
+	"info": {
+		"_postman_id": "be4a3404-576a-4eb3-9c3e-08d06fe75f59",
+		"name": "newappp",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "forgetpass",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "phone",
+							"value": "9339554240",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "https://familybaskets.co.in/api/verifyotp.php",
+					"protocol": "https",
+					"host": [
+						"familybaskets",
+						"co",
+						"in"
+					],
+					"path": [
+						"api",
+						"verifyotp.php"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "updatepass",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "phone",
+							"value": "9339554240",
+							"type": "text"
+						},
+						{
+							"key": "password",
+							"value": "12345",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "https://familybaskets.co.in/api/updatepass.php",
+					"protocol": "https",
+					"host": [
+						"familybaskets",
+						"co",
+						"in"
+					],
+					"path": [
+						"api",
+						"updatepass.php"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

@@ -1,0 +1,243 @@
+{
+	"info": {
+		"_postman_id": "b354c4b9-2cf2-4156-a469-d4a98815177f",
+		"name": "apilist",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "login",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "email",
+							"value": "mondalabhijit599@gmail.com",
+							"type": "text",
+							"disabled": true
+						},
+						{
+							"key": "name",
+							"value": "Abhijit Mondal",
+							"type": "text",
+							"disabled": true
+						},
+						{
+							"key": "action",
+							"value": "login",
+							"type": "text"
+						},
+						{
+							"key": "password",
+							"value": "1234",
+							"type": "text"
+						},
+						{
+							"key": "phone",
+							"value": "9339554240",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "https://familybaskets.co.in/api/login.php",
+					"protocol": "https",
+					"host": [
+						"familybaskets",
+						"co",
+						"in"
+					],
+					"path": [
+						"api",
+						"login.php"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "calllog.php",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "name",
+							"value": "mondal",
+							"type": "text"
+						},
+						{
+							"key": "phone",
+							"value": "9339554240",
+							"type": "text"
+						},
+						{
+							"key": "calltype",
+							"value": "incomming",
+							"type": "text"
+						},
+						{
+							"key": "callingtime",
+							"value": "10:30pm",
+							"type": "text"
+						},
+						{
+							"key": "duration",
+							"value": "2hr 3min",
+							"type": "text"
+						},
+						{
+							"key": "userid",
+							"value": "1",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "https://familybaskets.co.in/api/calllog.php",
+					"protocol": "https",
+					"host": [
+						"familybaskets",
+						"co",
+						"in"
+					],
+					"path": [
+						"api",
+						"calllog.php"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "contact.php",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "userid",
+							"value": "1",
+							"type": "text"
+						},
+						{
+							"key": "name",
+							"value": "abhijit",
+							"type": "text"
+						},
+						{
+							"key": "phone",
+							"value": "8942905989",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "https://familybaskets.co.in/api/contact.php",
+					"protocol": "https",
+					"host": [
+						"familybaskets",
+						"co",
+						"in"
+					],
+					"path": [
+						"api",
+						"contact.php"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "statuscheck",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "email",
+							"value": "mondalabhijit599@gmail.com",
+							"type": "text",
+							"disabled": true
+						},
+						{
+							"key": "name",
+							"value": "chanchal",
+							"type": "text",
+							"disabled": true
+						},
+						{
+							"key": "action",
+							"value": "register",
+							"type": "text",
+							"disabled": true
+						},
+						{
+							"key": "password",
+							"value": "1234",
+							"type": "text",
+							"disabled": true
+						},
+						{
+							"key": "phone",
+							"value": "98098987679",
+							"type": "text",
+							"disabled": true
+						},
+						{
+							"key": "deviceid",
+							"value": "2",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "https://familybaskets.co.in/api/statusCheck.php",
+					"protocol": "https",
+					"host": [
+						"familybaskets",
+						"co",
+						"in"
+					],
+					"path": [
+						"api",
+						"statusCheck.php"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"auth": {
+		"type": "apikey"
+	},
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	]
+}
