@@ -12,11 +12,10 @@ class SignUp extends StatefulWidget{
   SignUpState createState() => SignUpState();
 }
 
-class SignUpState extends State<SignUp>{
+class SignUpState extends State<SignUp> {
   final _formKey = GlobalKey<FormState>();
-  TextEditingController email,name,password,phone;
-  final urlVerifyNumber = "https://familybaskets.co.in/api/verifyotp.php";
-  final urlOtp = "https://familybaskets.co.in/api/sms.php";
+  TextEditingController email, name, password, phone;
+  final urlSms = "https://familybaskets.co.in/api/sms.php";
 
   @override
   void initState() {
@@ -79,24 +78,6 @@ class SignUpState extends State<SignUp>{
                   ),
 
 
-                  // SizedBox(height: 15,),
-                  // TextFormField(
-                  //   validator: (text) {
-                  //     if (text == null || text.isEmpty) {
-                  //       return 'Text is empty';
-                  //     }
-                  //     return null;
-                  //   },
-                  //   controller: email,
-                  //   keyboardType: TextInputType.text,
-                  //   decoration: InputDecoration(
-                  //     border: OutlineInputBorder(),
-                  //     hintText: 'Enter Email',
-                  //     label: Text('Email'),
-                  //   ),
-                  // ),
-
-
                   SizedBox(height: 15,),
                   TextFormField(
                     validator: (text) {
@@ -117,28 +98,33 @@ class SignUpState extends State<SignUp>{
                     ),
                   ),
                   SizedBox(height: 15,),
-                  MaterialButton(onPressed: ()async{
-                    if(_formKey.currentState.validate()){
-                      final response = await http.post(Uri.parse(urlVerifyNumber),
-                          body: {
-                            "phone" : phone.text.toString(),
-                          });
-                      final body = json.decode(response.body);
-                      if(body['status'] == 200){
-                        Fluttertoast.showToast(msg: body['message']);
-                        print(body);
-                      }else if(body['status'] == 404){
-                        generateOtp();
-                        print(body);
+                  MaterialButton(
+                    onPressed: () async {
+                      if (_formKey.currentState.validate()) {
+                        final response = await http.post(Uri.parse(urlSms),
+                            body: {
+                              "name": name.text.toString(),
+                              "number": phone.text.toString()
+                            });
+                        final body = json.decode(response.body);
+                        if (body['status'] == 200) {
+                          Fluttertoast.showToast(msg: body['message']);
+                          generateOtp(body);
+                          print(body);
+                        } else if (body['status'] == 404) {
+                          Fluttertoast.showToast(msg: body['message']);
+                          print(body);
+                        }
                       }
-                    }
-                  },
+                    },
                     minWidth: double.maxFinite,
                     color: Colors.lightGreen,
                     shape: RoundedRectangleBorder(),
                     child: Padding(
                         padding: EdgeInsets.fromLTRB(0, 12, 0, 12),
-                        child: Text('SignIn',style: TextStyle(fontSize: 20,color: Colors.white),textScaleFactor: 1.0,)),
+                        child: Text(
+                          'SignIn', style: TextStyle(fontSize: 20, color: Colors
+                            .white), textScaleFactor: 1.0,)),
                   ),
                 ],
               ),
@@ -149,25 +135,15 @@ class SignUpState extends State<SignUp>{
     );
   }
 
-  void generateOtp() async {
+  void generateOtp(body) async {
     final prefs = await SharedPreferences.getInstance();
-    final response = await http.post(Uri.parse(urlOtp),
-        body: {
-          "name": name.text.toString(),
-          "number" : phone.text.toString()
-        });
-    final body = json.decode(response.body);
-    if(body['status'] == 200){
+    if(body['otp']!=null){
       prefs.setString('otp', body['otp']);
-      prefs.setString('name', name.text);
-      prefs.setString('phone', phone.text);
-      prefs.setString('password', password.text);
-      Navigator.of(context).pushReplacement(new MaterialPageRoute(builder: (context) => verifyOtp(),));
-      Fluttertoast.showToast(msg: body['message']);
-      print(body);
-    }else if(body['status'] == 404){
-      Fluttertoast.showToast(msg: body['message']);
-      print(body);
     }
+    prefs.setString('name', name.text);
+    prefs.setString('phone', phone.text);
+    prefs.setString('password', password.text);
+    Navigator.of(context).pushReplacement(
+        new MaterialPageRoute(builder: (context) => verifyOtp(),));
   }
 }

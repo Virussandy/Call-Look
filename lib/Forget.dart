@@ -1,13 +1,10 @@
 import 'dart:convert';
 
-import 'package:call_look/verifyOtp.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:lottie/lottie.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
-
-import 'ResetPassword.dart';
 import 'VerifyForgetOtp.dart';
 
 class Forget extends StatefulWidget {
@@ -19,7 +16,7 @@ class _ForgetState extends State<Forget> {
 
   final _formKey = GlobalKey<FormState>();
   TextEditingController phone;
-  final urlOtp = "https://familybaskets.co.in/api/verifyotp.php";
+  final urlVerifyOtp = "https://familybaskets.co.in/api/verifyotp.php";
 
   @override
   void initState() {
@@ -65,7 +62,7 @@ class _ForgetState extends State<Forget> {
                   MaterialButton(
                     onPressed: () async {
                       if (_formKey.currentState.validate()) {
-                        final response = await http.post(Uri.parse(urlOtp),
+                        final response = await http.post(Uri.parse(urlVerifyOtp),
                             body: {
                               "phone": phone.text.toString(),
                             });
