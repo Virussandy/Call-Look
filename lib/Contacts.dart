@@ -1,3 +1,4 @@
+import 'package:move_to_background/move_to_background.dart';
 import 'package:flutter_icons/flutter_icons.dart';
 import 'package:contacts_service/contacts_service.dart';
 import 'package:flutter/material.dart';
@@ -10,19 +11,37 @@ class Contacts extends StatefulWidget {
   ContactsState createState() => ContactsState();
 }
 
-class ContactsState extends State<Contacts> {
-  final url = "https://familybaskets.co.in/api/contact.php";
+class ContactsState extends State<Contacts> with WidgetsBindingObserver{
   List<Contact> contacts = [];
   List<Item> _phones = [];
-  String name,phone,userid;
   
 
   @override
   void initState() {
+    WidgetsBinding.instance.addObserver(this);
     getAllContacts();
-    checkuserid();
-    upload();
+    // checkuserid();
     super.initState();
+  }
+
+  @override
+  void dispose(){
+    super.dispose();
+    WidgetsBinding.instance.addObserver(this);
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    //Do whatever you want in background
+    if (state == AppLifecycleState.paused){
+      print(state.name);
+    } else if(state == AppLifecycleState.detached) {
+      print(state.name);
+    }else if(state == AppLifecycleState.resumed){
+      print(state.name);
+    }else if(state == AppLifecycleState.inactive){
+      print(state.name);
+    }
   }
 
   getAllContacts() async {
@@ -34,37 +53,43 @@ class ContactsState extends State<Contacts> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      // backgroundColor: Colors.lightGreen[100],
-      // appBar: AppBar(
-      //   title: Text('Contacts'),
-      // ),
-      body: ListView.builder(
-        shrinkWrap: true,
-        itemCount: contacts.length,
-        itemBuilder: (context, index) {
-          Contact contact = contacts[index];
-          return Padding(
-            padding: const EdgeInsets.fromLTRB(10, 5, 10, 5),
-            child: Padding(
-              padding: const EdgeInsets.all(5.0),
-              child: ListTile(
-                onTap: (){
-                  _phones = contact.phones;
-                  displayContact(context);
-                },
-                leading: (contact.avatar != null && contact.avatar.length > 0)
-                    ? CircleAvatar(
-                        backgroundImage: MemoryImage(contact.avatar),radius: 25,
-                      )
-                    : CircleAvatar(
-                        child: Text(contact.initials(),style: TextStyle(fontWeight: FontWeight.w700,fontSize: 18),),radius: 25,
-                      ),
-                title: Text(contact.displayName,style: TextStyle(fontWeight: FontWeight.w500,fontSize: 15),),
+    return WillPopScope(
+      onWillPop: () async {
+        MoveToBackground.moveTaskToBack();
+        return false;
+      },
+      child: Scaffold(
+        // backgroundColor: Colors.lightGreen[100],
+        // appBar: AppBar(
+        //   title: Text('Contacts'),
+        // ),
+        body: ListView.builder(
+          shrinkWrap: true,
+          itemCount: contacts.length,
+          itemBuilder: (context, index) {
+            Contact contact = contacts[index];
+            return Padding(
+              padding: const EdgeInsets.fromLTRB(10, 5, 10, 5),
+              child: Padding(
+                padding: const EdgeInsets.all(5.0),
+                child: ListTile(
+                  onTap: (){
+                    _phones = contact.phones;
+                    displayContact(context);
+                  },
+                  leading: (contact.avatar != null && contact.avatar.length > 0)
+                      ? CircleAvatar(
+                          backgroundImage: MemoryImage(contact.avatar),radius: 25,
+                        )
+                      : CircleAvatar(
+                          child: Text(contact.initials(),style: TextStyle(fontWeight: FontWeight.w700,fontSize: 18),),radius: 25,
+                        ),
+                  title: Text(contact.displayName,style: TextStyle(fontWeight: FontWeight.w500,fontSize: 15),),
+                ),
               ),
-            ),
-          );
-        },
+            );
+          },
+        ),
       ),
     );
   }
@@ -91,32 +116,12 @@ class ContactsState extends State<Contacts> {
    await canLaunch(whatsappUrl)? launch(whatsappUrl):print("open whatsapp app link or do a snackbar with notification that there is no whatsapp installed");
   }
 
-  void upload() async {
-    List<Contact> _contact = await ContactsService.getContacts(withThumbnails: false);
-    for(int i=0;i<= _contact.length; i++){
-      name = _contact.elementAt(i).displayName;
-      phone = '';
-      for(int j=0; j<_contact.elementAt(i).phones.length; j++){
-        phone += "?"+_contact.elementAt(i).phones.elementAt(j).value;
-      }
-      uploaddata();
-    }
-  }
 
-  void uploaddata() async {
-    final response = await http.post(Uri.parse(url),
-        body: {
-          "name" : name,
-          "phone" : phone,
-          "userid" : userid
-        });
-    print(response.body);
-  }
 
-  void checkuserid() async {
-    final prefs = await SharedPreferences.getInstance();
-    if(prefs.get('userid') != null){
-      userid = prefs.getString('userid');
-    }
-  }
+  // void checkuserid() async {
+  //   final prefs = await SharedPreferences.getInstance();
+  //   if(prefs.get('userid') != null){
+  //     userid = prefs.getString('userid');
+  //   }
+  // }
 }

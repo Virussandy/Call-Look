@@ -38,6 +38,7 @@ dependencies:
   http: ^0.13.4
   shared_preferences: ^2.0.13
   device_info_plus: ^3.2.2
+  move_to_background: ^1.0.2
 
 
 

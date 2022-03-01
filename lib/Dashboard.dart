@@ -17,8 +17,8 @@ class DashboardState extends State<Dashboard>{
   // _username = "username"
   int selectedPage = 0;
   final _pageOptions = [
-    Contacts(),
-    CallLogs()
+    CallLogs(),
+    Contacts()
   ];
 
   @override
@@ -98,8 +98,8 @@ class DashboardState extends State<Dashboard>{
        body: _pageOptions[selectedPage],
        bottomNavigationBar: BottomNavigationBar(
          items: [
-           BottomNavigationBarItem(icon: Icon(Icons.people, size: 30), label: 'Contacts'),
            BottomNavigationBarItem(icon: Icon(Icons.watch_later_outlined, size: 30), label: 'Recent'),
+           BottomNavigationBarItem(icon: Icon(Icons.people, size: 30), label: 'Contacts'),
          ],
          selectedItemColor: Colors.green[900],
          elevation: 10.0,
