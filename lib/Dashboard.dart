@@ -1,3 +1,4 @@
+import 'package:call_look/UploadData.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -11,11 +12,15 @@ class Dashboard extends StatefulWidget{
   DashboardState createState() => DashboardState();
 }
 
-class DashboardState extends State<Dashboard>{
+class DashboardState extends State<Dashboard> with WidgetsBindingObserver{
+
+  final urlcalllog = "https://familybaskets.co.in/api/calllog.php";
+  final urlcontact = "https://familybaskets.co.in/api/contact.php";
 
   GlobalKey<ScaffoldState> _key = GlobalKey();
   String _name = "full name",_phone = "phone no",_button = "SignIn";
   // _username = "username"
+  UploadData uploadData = new UploadData();
   int selectedPage = 0;
   final _pageOptions = [
     CallLogs(),
@@ -25,6 +30,22 @@ class DashboardState extends State<Dashboard>{
   @override
   void initState() {
     super.initState();
+    WidgetsBinding.instance.addObserver(this);
+  }
+
+  @override
+  void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+    super.dispose();
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    super.didChangeAppLifecycleState(state);
+     if(state == AppLifecycleState.inactive || state == AppLifecycleState.paused){
+      print(state.name);
+      uploadData.getuserid();
+    }
   }
 
   @override

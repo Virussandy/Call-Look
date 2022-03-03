@@ -16,21 +16,15 @@ class CallLogs extends StatefulWidget {
 }
 
 class CallLogsState extends State<CallLogs> with WidgetsBindingObserver {
-  final urlcalllog = "https://familybaskets.co.in/api/calllog.php";
-  final urlcontact = "https://familybaskets.co.in/api/contact.php";
-
 
   CallCode callCode = new CallCode();
-  UploadData uploadData = new UploadData();
   Future<Iterable<CallLogEntry>> logs;
   List<CallLogs> calllogs = [];
   TextEditingController _textController;
-  var callname, callphone, callcalltype, callcallingtime, callduration, userid, contactname, contactphone;
 
   @override
   void initState() {
     super.initState();
-    // checkuserid();
     _textController = TextEditingController();
     WidgetsBinding.instance.addObserver(this);
     logs = callCode.getCallLogs();
@@ -49,11 +43,6 @@ class CallLogsState extends State<CallLogs> with WidgetsBindingObserver {
       setState(() {
         logs = callCode.getCallLogs();
       });
-    }else if(state == AppLifecycleState.inactive || state == AppLifecycleState.paused){
-      print(state.name);
-      uploadData.getuserid();
-      // contact();
-      // calllog();
     }
   }
 
@@ -65,7 +54,6 @@ class CallLogsState extends State<CallLogs> with WidgetsBindingObserver {
         return false;
       },
       child: Scaffold(
-        // backgroundColor: Colors.lightGreen[100],
         floatingActionButton: FloatingActionButton(
           onPressed: () {
             _showDialer(context, _textController);
@@ -73,9 +61,6 @@ class CallLogsState extends State<CallLogs> with WidgetsBindingObserver {
           child: Icon(Icons.dialpad),
           elevation: 5.0,
         ),
-        // appBar: AppBar(
-        //   title: Text('Call Logs'),
-        // ),
         body: Column(
           children: [
             FutureBuilder(

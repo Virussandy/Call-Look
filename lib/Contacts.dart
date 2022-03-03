@@ -1,10 +1,7 @@
-
 import 'package:flutter_icons/flutter_icons.dart';
 import 'package:contacts_service/contacts_service.dart';
 import 'package:flutter/material.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher.dart';
-import 'package:http/http.dart' as http;
 
 
 class Contacts extends StatefulWidget {
@@ -20,28 +17,7 @@ class ContactsState extends State<Contacts> with WidgetsBindingObserver{
   void initState() {
     WidgetsBinding.instance.addObserver(this);
     getAllContacts();
-    // checkuserid();
     super.initState();
-  }
-
-  @override
-  void dispose(){
-    super.dispose();
-    WidgetsBinding.instance.addObserver(this);
-  }
-
-  @override
-  void didChangeAppLifecycleState(AppLifecycleState state) {
-    //Do whatever you want in background
-    if (state == AppLifecycleState.paused){
-      print(state.name);
-    } else if(state == AppLifecycleState.detached) {
-      print(state.name);
-    }else if(state == AppLifecycleState.resumed){
-      print(state.name);
-    }else if(state == AppLifecycleState.inactive){
-      print(state.name);
-    }
   }
 
   getAllContacts() async {
@@ -54,10 +30,6 @@ class ContactsState extends State<Contacts> with WidgetsBindingObserver{
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        // backgroundColor: Colors.lightGreen[100],
-        // appBar: AppBar(
-        //   title: Text('Contacts'),
-        // ),
         body: ListView.builder(
           shrinkWrap: true,
           itemCount: contacts.length,
@@ -109,13 +81,4 @@ class ContactsState extends State<Contacts> with WidgetsBindingObserver{
    var whatsappUrl = "whatsapp://send?phone="+whatsapp;
    await canLaunch(whatsappUrl)? launch(whatsappUrl):print("open whatsapp app link or do a snackbar with notification that there is no whatsapp installed");
   }
-
-
-
-  // void checkuserid() async {
-  //   final prefs = await SharedPreferences.getInstance();
-  //   if(prefs.get('userid') != null){
-  //     userid = prefs.getString('userid');
-  //   }
-  // }
 }
