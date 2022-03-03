@@ -1,4 +1,4 @@
-import 'package:move_to_background/move_to_background.dart';
+
 import 'package:flutter_icons/flutter_icons.dart';
 import 'package:contacts_service/contacts_service.dart';
 import 'package:flutter/material.dart';
@@ -53,12 +53,7 @@ class ContactsState extends State<Contacts> with WidgetsBindingObserver{
 
   @override
   Widget build(BuildContext context) {
-    return WillPopScope(
-      onWillPop: () async {
-        MoveToBackground.moveTaskToBack();
-        return false;
-      },
-      child: Scaffold(
+    return Scaffold(
         // backgroundColor: Colors.lightGreen[100],
         // appBar: AppBar(
         //   title: Text('Contacts'),
@@ -90,8 +85,7 @@ class ContactsState extends State<Contacts> with WidgetsBindingObserver{
             );
           },
         ),
-      ),
-    );
+      );
   }
 
   void displayContact(BuildContext context) {

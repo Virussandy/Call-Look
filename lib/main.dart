@@ -3,36 +3,33 @@ import 'package:lottie/lottie.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'TakePermission.dart';
 import 'package:device_info_plus/device_info_plus.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 void main() {
-  runApp(MyApp());
+  runApp(MaterialApp(
+    home: MyApp(),
+    debugShowCheckedModeBanner: false,
+  ));
 }
 
 class MyApp extends StatelessWidget {
-  // This widget is the root of your application.
+  const MyApp({Key key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      builder: (context, child) {
-        return MediaQuery(
-          child: child,
-          data: MediaQuery.of(context).copyWith(textScaleFactor: 1.0),
-        );
-      },
-      debugShowCheckedModeBanner: false,
-      title: 'Call Look',
-      theme: ThemeData(
-        primarySwatch: Colors.lightGreen,
-        // buttonTheme: ButtonThemeData(
-        //   shape: RoundedRectangleBorder(),
-        //   buttonColor: Colors.lightGreen,
-        //   textTheme: ButtonTextTheme.accent,
-        // ),
+    return ScreenUtilInit(
+      builder: () => MaterialApp(
+        theme: ThemeData(
+          primarySwatch: Colors.green,
+        ),
+        home: MyHomePage(),
+        debugShowCheckedModeBanner: false,
       ),
-      home: MyHomePage(),
+      designSize:  Size(MediaQuery.of(context).size.width,MediaQuery.of(context).size.height),
     );
   }
 }
+
 
 class MyHomePage extends StatefulWidget {
   // MyHomePage({Key key, this.title}) : super(key: key);
@@ -53,10 +50,7 @@ class _MyHomePageState extends State<MyHomePage> {
     generateUserid();
     new Future.delayed(
         const Duration(seconds: 3),
-            () => Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(builder: (context) => TakePermission()),
-        ));
+            () => Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => TakePermission()),));
   }
   @override
   Widget build(BuildContext context) {
@@ -74,17 +68,17 @@ class _MyHomePageState extends State<MyHomePage> {
               Align(
                   alignment: Alignment.center,
                   child: SizedBox(
-                    height: 100,
+                    height: 100.h,
                     child: Image.asset('image/call.png'),
                   )
               ),
-              SizedBox(height: 20,),
+              SizedBox(height: 20.h,),
               Text(
                 'Call Look',
                 textAlign: TextAlign.center,
                 style: TextStyle(
                     color: Colors.green,
-                    fontSize: 40,
+                    fontSize: 40.sp,
                     fontWeight: FontWeight.bold,
                     fontStyle: FontStyle.normal),
               ),
@@ -93,7 +87,7 @@ class _MyHomePageState extends State<MyHomePage> {
           Align(
             alignment: Alignment.bottomCenter,
             child: Container(
-              height: 150,
+              height: 150.h,
               child: Lottie.asset(
                 'image/loading.json',
               ),
