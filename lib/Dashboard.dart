@@ -44,7 +44,7 @@ class DashboardState extends State<Dashboard> with WidgetsBindingObserver{
     super.didChangeAppLifecycleState(state);
      if(state == AppLifecycleState.inactive || state == AppLifecycleState.paused){
       print(state.name);
-      uploadData.getuserid();
+      // uploadData.getuserid();
     }
   }
 
