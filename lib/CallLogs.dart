@@ -1,5 +1,4 @@
 import 'dart:ui';
-
 import 'package:call_log/call_log.dart';
 import 'package:call_look/CallCode.dart';
 import 'package:flutter/material.dart';
@@ -38,11 +37,11 @@ class CallLogsState extends State<CallLogs> with WidgetsBindingObserver {
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
     super.didChangeAppLifecycleState(state);
-    if (AppLifecycleState.resumed == state) {
-      setState(() {
-        logs = callCode.getCallLogs();
-      });
-    }
+    // if (AppLifecycleState.resumed == state) {
+    //   setState(() {
+    //     logs = callCode.getCallLogs();
+    //   });
+    // }
   }
 
   @override

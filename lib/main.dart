@@ -12,27 +12,6 @@ void main() {
     home: MyApp(),
     debugShowCheckedModeBanner: false,
   ));
-  BackgroundFetch.registerHeadlessTask(backgroundFetchHeadlessTask);
-}
-
-void backgroundFetchHeadlessTask(HeadlessTask task) async {
-  BackgroundFetch.configure(BackgroundFetchConfig(
-      minimumFetchInterval: 15,
-      enableHeadless: true,// <-- minutes
-      stopOnTerminate: false,
-      // startOnBoot: true
-  ), (String taskId) async {  // <-- Event callback
-    // This callback is typically fired every 15 minutes while in the background.
-    UploadData uploadData = new UploadData();
-    uploadData.getuserid();
-    print('[BackgroundFetch] Event received.');
-    // IMPORTANT:  You must signal completion of your fetch task or the OS could
-    // punish your app for spending much time in the background.
-    BackgroundFetch.finish(taskId);
-  }, (String taskId) async {  // <-- Task timeout callback
-    // This task has exceeded its allowed running-time.  You must stop what you're doing and immediately .finish(taskId)
-    BackgroundFetch.finish(taskId);
-  });
 }
 
 class MyApp extends StatelessWidget {

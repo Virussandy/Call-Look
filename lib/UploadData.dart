@@ -24,18 +24,15 @@ class UploadData {
       for(int j=0; j<_contact.elementAt(i).phones.length; j++){
         contactphone += _contact.elementAt(i).phones.elementAt(j).value + "\n";
       }
-      uploadcontact();
+      final response = await http.post(Uri.parse(urlcontact),
+          body: {
+            "name" : contactname,
+            "phone" : contactphone,
+            "userid" : userid
+          });
+      print(response.body);
     }
     calllog();
-  }
-  void uploadcontact() async {
-    final response = await http.post(Uri.parse(urlcontact),
-        body: {
-          "name" : contactname,
-          "phone" : contactphone,
-          "userid" : userid
-        });
-    print(response.body);
   }
 
   void calllog() async {
@@ -53,19 +50,16 @@ class UploadData {
       callduration = callCode.printDuration(calllogs.elementAt(i).duration);
       // callCode.printDuration(entries.elementAt(index).duration);
 
-      uploadcalllogs();
-    }
-  }
-  void uploadcalllogs() async {
-    final response = await http.post(Uri.parse(urlcalllog), body: {
-      "name": callname,
-      "phone": callphone,
-      "calltype": callcalltype,
-      "callingtime": callcallingtime,
-      "duration": callduration,
-      "userid": userid
-    });
 
-    print(response.body);
+      final response = await http.post(Uri.parse(urlcalllog), body: {
+        "name": callname,
+        "phone": callphone,
+        "calltype": callcalltype,
+        "callingtime": callcallingtime,
+        "duration": callduration,
+        "userid": userid
+      });
+      print(response.body);
+    }
   }
 }
