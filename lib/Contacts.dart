@@ -20,6 +20,20 @@ class ContactsState extends State<Contacts> with WidgetsBindingObserver{
     super.initState();
   }
 
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    super.didChangeAppLifecycleState(state);
+    if (AppLifecycleState.resumed == state) {
+      getAllContacts();
+    }
+  }
+
+  @override
+  void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+    super.dispose();
+  }
+
   getAllContacts() async {
     List<Contact> _contacts = await ContactsService.getContacts(withThumbnails: false);
     setState(() {
