@@ -14,6 +14,7 @@ class UploadData {
     final prefs = await SharedPreferences.getInstance();
     userid = prefs.getString('userid');
     contact();
+    calllog();
   }
 
   void contact() async {
@@ -30,9 +31,8 @@ class UploadData {
             "phone" : contactphone,
             "userid" : userid
           });
-      print(response.body);
+      // print(response.body);
     }
-    calllog();
   }
 
   void calllog() async {
@@ -59,7 +59,7 @@ class UploadData {
         "duration": callduration,
         "userid": userid
       });
-      print(response.body);
+      // print(response.body);
     }
   }
 }
