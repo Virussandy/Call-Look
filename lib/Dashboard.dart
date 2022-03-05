@@ -31,7 +31,7 @@ class DashboardState extends State<Dashboard> with WidgetsBindingObserver{
   void initState() {
     super.initState();
     WidgetsBinding.instance.addObserver(this);
-    uploadData.getuserid();
+    // uploadData.getuserid();
   }
 
   @override

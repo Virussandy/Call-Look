@@ -57,27 +57,11 @@ class CallCode{
     }
   }
 
-  String getTime(int duration){
-    Duration d = Duration(seconds: duration);
-    String formattedDuration = "";
-    if(d.inHours > 0){
-      formattedDuration += d.inHours.toString() +"h ";
-    }
-    if(d.inMinutes > 0){
-      formattedDuration += d.inMinutes.toString() +"m ";
-    }
-    if(d.inSeconds > 0){
-      formattedDuration += d.inSeconds.toString() + "s";
-    }
-    if(formattedDuration.isEmpty)
-      return "0s";
-      return formattedDuration;
-  }
 
   String printDuration(int totalSeconds) {
     final duration = Duration(seconds: totalSeconds);
     final hours = duration.inHours;
-    final minutes = duration.inMinutes;
+    final minutes = duration.inMinutes % 60;
     final seconds = totalSeconds % 60;
 
     final hoursString = '$hours'.padLeft(2, '0');
