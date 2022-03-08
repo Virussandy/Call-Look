@@ -1,5 +1,3 @@
-import 'package:background_fetch/background_fetch.dart';
-import 'package:call_look/UploadData.dart';
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
 import 'package:shared_preferences/shared_preferences.dart';

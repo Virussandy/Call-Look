@@ -74,6 +74,7 @@ flutter:
     - image/otp.json
     - image/forget.json
     - image/reset.json
+    - image/support.json
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.

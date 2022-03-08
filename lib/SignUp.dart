@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:call_look/verifyOtp.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:lottie/lottie.dart';
@@ -125,6 +126,42 @@ class SignUpState extends State<SignUp> {
                         child: Text(
                           'SignIn', style: TextStyle(fontSize: 20, color: Colors
                             .white), textScaleFactor: 1.0,)),
+                  ),
+                  Container(
+                    alignment: Alignment.center,
+                    padding: EdgeInsets.all(10),
+                    child: Center(
+                        child: Text.rich(TextSpan(
+                            text: 'By continuing, you agree to our ',
+                            style: TextStyle(fontSize: 16, color: Colors.black),
+                            children: <TextSpan>[
+                              TextSpan(
+                                  text: 'Terms of Service',
+                                  style: TextStyle(
+                                    fontSize: 16,
+                                    color: Colors.blue,
+                                    decoration: TextDecoration.underline,
+                                  ),
+                                  recognizer: TapGestureRecognizer()
+                                    ..onTap = () {
+                                      // code to open / launch terms of service link here
+                                    }),
+                              TextSpan(
+                                  text: ' and ',
+                                  style: TextStyle(fontSize: 16, color: Colors.black),
+                                  children: <TextSpan>[
+                                    TextSpan(
+                                        text: 'Privacy Policy',
+                                        style: TextStyle(
+                                            fontSize: 16,
+                                            color: Colors.blue,
+                                            decoration: TextDecoration.underline),
+                                        recognizer: TapGestureRecognizer()
+                                          ..onTap = () {
+                                            // code to open / launch privacy policy link here
+                                          })
+                                  ])
+                            ]))),
                   ),
                 ],
               ),

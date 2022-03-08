@@ -7,6 +7,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'CallLogs.dart';
 import 'Contacts.dart';
 import 'LoginScreen.dart';
+import 'Support.dart';
 
 class Dashboard extends StatefulWidget{
   DashboardState createState() => DashboardState();
@@ -114,6 +115,13 @@ class DashboardState extends State<Dashboard> with WidgetsBindingObserver{
                            builder: (context) => LoginScreen()));
                      }
                    }
+               ),
+               ListTile(
+                 leading: Icon(Icons.support_agent),
+                 title: Text('Support'),
+                 onTap: (){
+                   Navigator.of(context).push(new MaterialPageRoute(builder: (Context) => Support()));
+                 },
                ),
              ],
            ),
