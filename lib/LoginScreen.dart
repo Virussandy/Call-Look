@@ -18,7 +18,8 @@ class LoginScreen extends StatefulWidget {
 class LoginScreenState extends State<LoginScreen> {
   final _formKey = GlobalKey<FormState>();
   TextEditingController phone, password;
-  final url = "https://familybaskets.co.in/api/login.php";
+  BuildContext dialogContext;
+  final url = "https://www.calllook.com/api/login.php";
 
   @override
   void initState() {
@@ -91,6 +92,7 @@ class LoginScreenState extends State<LoginScreen> {
                   onPressed: () async {
                     final prefs = await SharedPreferences.getInstance();
                     if (_formKey.currentState.validate()) {
+                      showLoading();
                       final response = await http.post(Uri.parse(url), body: {
                         "action": "login",
                         "phone": phone.text.toString(),
@@ -108,6 +110,7 @@ class LoginScreenState extends State<LoginScreen> {
                         await prefs.setString('phone', body['data']['phone']);
                         Fluttertoast.showToast(msg: body['message']);
                         print(body);
+                        Navigator.pop(dialogContext);
                         Navigator.pop(context);
                       } else {
                         Fluttertoast.showToast(msg: body['message']);
@@ -128,13 +131,6 @@ class LoginScreenState extends State<LoginScreen> {
                       )),
                 ),
                 SizedBox(height: 10,),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: [
-                    InkWell(onTap: () =>Navigator.push(context, new MaterialPageRoute(builder: (context) => Forget())),
-                    child: Text('Forget Password',style: TextStyle(fontWeight: FontWeight.w500),))
-                  ],
-                ),
                 Align(
                   alignment: Alignment.center,
                   child: ListTile(
@@ -155,6 +151,8 @@ class LoginScreenState extends State<LoginScreen> {
                               fontSize: 18,
                               color: Colors.red),
                         )),
+                    trailing: InkWell(onTap: () =>Navigator.push(context, new MaterialPageRoute(builder: (context) => Forget())),
+                        child: Text('Forget Password',style: TextStyle(fontWeight: FontWeight.w500),)),
                   ),
                 ),
               ],
@@ -164,4 +162,25 @@ class LoginScreenState extends State<LoginScreen> {
       ),
     );
   }
+
+  void showLoading() {
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (BuildContext context) {
+        dialogContext = context;
+        return Dialog(
+          backgroundColor: Colors.transparent,
+          child: new Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              new CircularProgressIndicator(),
+            ],
+          ),
+        );
+      },
+    );
+  }
 }
+

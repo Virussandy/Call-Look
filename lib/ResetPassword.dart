@@ -17,7 +17,8 @@ class _ResetPasswordState extends State<ResetPassword> {
   final _formKey = GlobalKey<FormState>();
   TextEditingController password,confirmPassword;
   String _phone;
-  final urlupdatePassword = "https://familybaskets.co.in/api/updatepass.php";
+  final urlupdatePassword = "https://www.calllook.com/api/updatepass.php";
+  BuildContext dialogContext;
 
   @override
   void initState() {
@@ -87,6 +88,7 @@ class _ResetPasswordState extends State<ResetPassword> {
 
                     if(_formKey.currentState.validate()){
                       if(password.text == confirmPassword.text){
+                        showLoading();
                         final response = await http.post(Uri.parse(urlupdatePassword),
                             body: {
                               'phone' : _phone,
@@ -94,10 +96,12 @@ class _ResetPasswordState extends State<ResetPassword> {
                             });
                         final body = json.decode(response.body);
                         if(body['status'] == 200){
+                          Navigator.pop(dialogContext);
                           Fluttertoast.showToast(msg: body['message']);
                           print(body);
                           Navigator.pop(context);
                         }else{
+                          Navigator.pop(dialogContext);
                           Fluttertoast.showToast(msg: body['message']);
                           print(body);
                         }
@@ -125,5 +129,25 @@ class _ResetPasswordState extends State<ResetPassword> {
   void getPhone() async {
     final prefs = await SharedPreferences.getInstance();
     _phone = prefs.getString('phone');
+  }
+
+  void showLoading() {
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (BuildContext context) {
+        dialogContext = context;
+        return Dialog(
+          backgroundColor: Colors.transparent,
+          child: new Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              new CircularProgressIndicator(),
+            ],
+          ),
+        );
+      },
+    );
   }
 }

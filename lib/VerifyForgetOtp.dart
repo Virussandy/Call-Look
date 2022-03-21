@@ -1,7 +1,11 @@
+import 'dart:convert';
+
 import 'package:call_look/ResetPassword.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:lottie/lottie.dart';
+import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 
 class VerifyForgetOtp extends StatefulWidget {
@@ -12,9 +16,11 @@ class VerifyForgetOtp extends StatefulWidget {
 }
 
 class _VerifyForgetOtpState extends State<VerifyForgetOtp> {
+  final urlVerifyOtp = "https://www.calllook.com/api/verifyotp.php";
   TextEditingController otp;
   final _formKey = GlobalKey<FormState>();
   String otpValue;
+  BuildContext dialogContext;
 
   @override
   void initState() {
@@ -48,6 +54,7 @@ class _VerifyForgetOtpState extends State<VerifyForgetOtp> {
                     },
                     controller: otp,
                     keyboardType: TextInputType.number,
+                    maxLength: 4,
                     decoration: InputDecoration(
                       border: OutlineInputBorder(),
                       hintText: 'Enter Otp',
@@ -73,6 +80,34 @@ class _VerifyForgetOtpState extends State<VerifyForgetOtp> {
                         padding: EdgeInsets.fromLTRB(0, 12, 0, 12),
                         child: Text('Submit',style: TextStyle(fontSize: 20,color: Colors.white),textScaleFactor: 1.0,)),
                   ),
+                  SizedBox(height: 15,),
+                  SizedBox(
+                    child: Text.rich(TextSpan(text: "Didn't get otp? ",style: TextStyle(fontWeight: FontWeight.bold),
+                        children: [
+                          TextSpan(text: "Resend",recognizer: TapGestureRecognizer()
+                            ..onTap = ()async{
+                            showLoading();
+                              final prefs = await SharedPreferences.getInstance();
+                              final response = await http.post(Uri.parse(urlVerifyOtp),
+                                  body: {
+                                    "phone": prefs.getString('phone'),
+                                  });
+                              final body = json.decode(response.body);
+                              if (body['status'] == 200) {
+                                Navigator.pop(dialogContext);
+                                Fluttertoast.showToast(msg: body['message']);
+                                setState(() {
+                                  otpValue = body['otp'];
+                                });
+                                print(body);
+                              } else {
+                                Navigator.pop(dialogContext);
+                                Fluttertoast.showToast(msg: body['message']);
+                                print(body);
+                              }
+                            },style: TextStyle(decoration: TextDecoration.underline,color: Colors.blue)),
+                        ])),
+                  ),
                 ],
               ),
             ),
@@ -94,5 +129,25 @@ class _VerifyForgetOtpState extends State<VerifyForgetOtp> {
     if(prefs.getString('otp')!= null) {
       prefs.remove('otp');
     }
+  }
+
+  void showLoading() {
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (BuildContext context) {
+        dialogContext = context;
+        return Dialog(
+          backgroundColor: Colors.transparent,
+          child: new Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              new CircularProgressIndicator(),
+            ],
+          ),
+        );
+      },
+    );
   }
 }

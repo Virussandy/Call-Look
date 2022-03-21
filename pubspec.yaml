@@ -41,6 +41,7 @@ dependencies:
   move_to_background: ^1.0.2
   flutter_screenutil: ^5.3.1
   background_fetch: ^1.0.3
+  rflutter_alert: ^2.0.4
 
 
 

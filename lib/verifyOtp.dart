@@ -1,5 +1,7 @@
 import 'dart:convert';
 
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:lottie/lottie.dart';
@@ -15,7 +17,9 @@ class _verifyOtpState extends State<verifyOtp> {
   TextEditingController otp;
   final _formKey = GlobalKey<FormState>();
   String otpValue;
-  final urlSignUp = "https://familybaskets.co.in/api/login.php";
+  final urlSignUp = "https://www.calllook.com/api/login.php";
+  final urlSms = "https://www.calllook.com/api/sms.php";
+  BuildContext dialogContext;
 
   @override
   void initState() {
@@ -49,6 +53,7 @@ class _verifyOtpState extends State<verifyOtp> {
                     },
                     controller: otp,
                     keyboardType: TextInputType.number,
+                    maxLength: 4,
                     decoration: InputDecoration(
                       border: OutlineInputBorder(),
                       hintText: 'Enter Otp',
@@ -59,6 +64,7 @@ class _verifyOtpState extends State<verifyOtp> {
                   MaterialButton(onPressed: ()async {
                     if (_formKey.currentState.validate()) {
                       if(otpValue == otp.text.toString()){
+                        showLoading();
                         final prefs = await SharedPreferences.getInstance();
                         final response = await http.post(Uri.parse(urlSignUp),
                             body: {
@@ -77,7 +83,7 @@ class _verifyOtpState extends State<verifyOtp> {
                           Fluttertoast.showToast(msg: body['message']);
                         }
                         Fluttertoast.showToast(msg: 'Account Created Successfully');
-                        deleteotp();
+                        Navigator.pop(dialogContext);
                         Navigator.pop(context);
                       }else{
                         Fluttertoast.showToast(msg: 'Please enter correct otp');
@@ -91,6 +97,14 @@ class _verifyOtpState extends State<verifyOtp> {
                         padding: EdgeInsets.fromLTRB(0, 12, 0, 12),
                         child: Text('Submit',style: TextStyle(fontSize: 20,color: Colors.white),textScaleFactor: 1.0,)),
                   ),
+                  SizedBox(height: 15,),
+                  SizedBox(
+                    child: Text.rich(TextSpan(text: "Didn't get otp? ",style: TextStyle(fontWeight: FontWeight.bold),
+                    children: [
+                      TextSpan(text: "Resend",recognizer: TapGestureRecognizer()
+                        ..onTap = () => getotp(),style: TextStyle(decoration: TextDecoration.underline,color: Colors.blue)),
+                    ])),
+                  ),
                 ],
               ),
             ),
@@ -100,18 +114,43 @@ class _verifyOtpState extends State<verifyOtp> {
     );
   }
 
-  void getotp() async{
+  void getotp() async {
     final prefs = await SharedPreferences.getInstance();
-    if(prefs.getString('otp')!= null) {
-      otpValue = prefs.getString('otp');
-      print(otpValue);
+    final response = await http.post(Uri.parse(urlSms),
+        body: {
+          "name":prefs.getString('name'),
+          "phone" : prefs.getString('phone'),
+        });
+    final body = json.decode(response.body);
+    if(body['status'] == 200){
+      print(response.body);
+      if (body['otp'] != null) {
+        otpValue = body['otp'];
+      }
+      Fluttertoast.showToast(msg: body['message']);
+    }else{
+      print(response.body);
+      Fluttertoast.showToast(msg: body['message']);
     }
   }
 
-  void deleteotp() async {
-    final prefs = await SharedPreferences.getInstance();
-    if(prefs.getString('otp')!= null) {
-      prefs.remove('otp');
-    }
+  void showLoading() {
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (BuildContext context) {
+        dialogContext = context;
+        return Dialog(
+          backgroundColor: Colors.transparent,
+          child: new Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              new CircularProgressIndicator(),
+            ],
+          ),
+        );
+      },
+    );
   }
 }

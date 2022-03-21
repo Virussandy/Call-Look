@@ -1,5 +1,4 @@
 import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:lottie/lottie.dart';
@@ -16,7 +15,8 @@ class _ForgetState extends State<Forget> {
 
   final _formKey = GlobalKey<FormState>();
   TextEditingController phone;
-  final urlVerifyOtp = "https://familybaskets.co.in/api/verifyotp.php";
+  final urlVerifyOtp = "https://www.calllook.com/api/verifyotp.php";
+  BuildContext dialogContext;
 
   @override
   void initState() {
@@ -62,16 +62,19 @@ class _ForgetState extends State<Forget> {
                   MaterialButton(
                     onPressed: () async {
                       if (_formKey.currentState.validate()) {
+                        showLoading();
                         final response = await http.post(Uri.parse(urlVerifyOtp),
                             body: {
                               "phone": phone.text.toString(),
                             });
                         final body = json.decode(response.body);
                         if (body['status'] == 200) {
+                          Navigator.pop(dialogContext);
                           Fluttertoast.showToast(msg: body['message']);
                           setotp(body['otp'],phone.text.toString());
                           print(body);
                         } else {
+                          Navigator.pop(dialogContext);
                           Fluttertoast.showToast(msg: body['message']);
                           print(body);
                         }
@@ -102,5 +105,25 @@ class _ForgetState extends State<Forget> {
     print(otp);
     Navigator.pushReplacement(context,
         new MaterialPageRoute(builder: (context) => VerifyForgetOtp()));
+  }
+
+  void showLoading() {
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (BuildContext context) {
+        dialogContext = context;
+        return Dialog(
+          backgroundColor: Colors.transparent,
+          child: new Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              new CircularProgressIndicator(),
+            ],
+          ),
+        );
+      },
+    );
   }
 }

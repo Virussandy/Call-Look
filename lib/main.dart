@@ -1,9 +1,12 @@
+import 'package:call_look/PermissionClass.dart';
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'TakePermission.dart';
+import 'Dashboard.dart';
 import 'package:device_info_plus/device_info_plus.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+
+import 'PermissionPage.dart';
 
 void main() {
   runApp(MaterialApp(
@@ -41,6 +44,8 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
 
+  PermissionClass permissionClass = new PermissionClass();
+
   DeviceInfoPlugin deviceInfo = DeviceInfoPlugin();
   AndroidDeviceInfo androidInfo;
 
@@ -50,7 +55,7 @@ class _MyHomePageState extends State<MyHomePage> {
     generateUserid();
     new Future.delayed(
         const Duration(seconds: 3),
-            () => Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => TakePermission()),));
+            () => check());
   }
   @override
   Widget build(BuildContext context) {
@@ -103,5 +108,15 @@ class _MyHomePageState extends State<MyHomePage> {
     androidInfo = await deviceInfo.androidInfo;
     prefs.setString('userid', androidInfo.androidId);
     prefs.setString('deviceid', androidInfo.androidId);
+  }
+
+  check() async {
+    Future<bool> check = permissionClass.pageNavigation();
+    if(await check){
+      Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => Dashboard()));
+    }
+    else if(!await check){
+      Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => PermissionPage()));
+    }
   }
 }

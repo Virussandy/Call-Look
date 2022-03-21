@@ -22,7 +22,7 @@ class Support extends StatelessWidget {
                     child: Text('Contact us on',style: TextStyle(fontWeight: FontWeight.w500,fontSize: 24,color: Colors.lightBlue),),
                   ),
                   Center(
-                    child: Text('calllook@gmail.com',style: TextStyle(color: Colors.lightBlueAccent),),
+                    child: Text('support@calllook.com',style: TextStyle(color: Colors.lightBlueAccent),),
                   )
                 ],
         ),

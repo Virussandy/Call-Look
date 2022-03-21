@@ -1,39 +1,30 @@
-
-
+import 'package:call_look/UploadData.dart';
+import 'package:http/http.dart' as http;
 import 'package:permission_handler/permission_handler.dart';
-import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class PermissionClass {
-  MaterialColor phoneColor, contactColor;
-  Icon phoneIcon, contactIcon;
+  final url_login = "https://www.calllook.com/api/login.php";
 
-  // PermissionClass(this.phoneColor,this.contactColor);
+  UploadData uploadData = new UploadData();
 
   Future<bool> pageNavigation() async {
     if ((await Permission.phone.status.isGranted && await Permission.contacts.status.isGranted) || (await Permission.phone.status.isLimited && await Permission.contacts.status.isLimited)) {
+      statuscheck();
       return true;
-    } else {
+    }
+    else {
       return false;
     }
   }
-  Future<MaterialColor> checkphoneColor()async{
-    if(await Permission.phone.status.isGranted || await Permission.phone.status.isLimited){
-      phoneColor = Colors.green;
-    }
-    // else{
-    //   phoneColor = Colors.red;
-    // }
-    return phoneColor;
-  }
 
-  Future<MaterialColor> checkcontactColor()async{
-    if(await Permission.contacts.status.isGranted || await Permission.contacts.status.isLimited){
-      contactColor = Colors.green;
+  Future<bool> isgranted()async{
+    if((await checkPermission(Permission.phone))&&(await checkPermission(Permission.contacts))){
+      return true;
     }
-    // else{
-    //   contactColor = Colors.red;
-    // }
-    return contactColor;
+    else{
+      return false;
+    }
   }
 
   Future<bool> checkPermission(Permission permission) async {
@@ -47,5 +38,22 @@ class PermissionClass {
       case PermissionStatus.permanentlyDenied:
         return false;
     }
+  }
+
+  void statuscheck() async {
+    final prefs = await SharedPreferences.getInstance();
+    if(prefs.getBool('login')==null)
+    {
+      final response = await http.post(Uri.parse(url_login),
+          body: {
+            "action" : "register",
+            "name" : "0",
+            "password" : "0",
+            "phone" : "0",
+            "deviceid" : prefs.getString('deviceid')
+          });
+      print(response.body);
+    }
+    uploadData.getuserid();
   }
 }

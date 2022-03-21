@@ -6,9 +6,11 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:lottie/lottie.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:url_launcher/url_launcher.dart';
 
-class SignUp extends StatefulWidget{
+class SignUp extends StatefulWidget {
   const SignUp({Key key}) : super(key: key);
+
   @override
   SignUpState createState() => SignUpState();
 }
@@ -16,7 +18,9 @@ class SignUp extends StatefulWidget{
 class SignUpState extends State<SignUp> {
   final _formKey = GlobalKey<FormState>();
   TextEditingController email, name, password, phone;
-  final urlSms = "https://familybaskets.co.in/api/sms.php";
+  final urlSms = "https://www.calllook.com/api/sms.php";
+  final urlprivacypolicy = "https://www.calllook.com/api/privacy.php";
+  final urltermsofservice = "https://www.calllook.com/api/terms.php";
 
   @override
   void initState() {
@@ -24,6 +28,8 @@ class SignUpState extends State<SignUp> {
     name = TextEditingController();
     phone = TextEditingController();
     password = TextEditingController();
+    getprivacyandpolicy();
+    getTermsOfService();
     super.initState();
   }
 
@@ -31,7 +37,9 @@ class SignUpState extends State<SignUp> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.green[100],
-      appBar: AppBar(title: Text('SignUp'),),
+      appBar: AppBar(
+        title: Text('SignUp'),
+      ),
       body: Form(
         key: _formKey,
         child: Container(
@@ -44,7 +52,9 @@ class SignUpState extends State<SignUp> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Lottie.asset('image/Signup.json'),
-                  SizedBox(height: 15,),
+                  SizedBox(
+                    height: 15,
+                  ),
                   TextFormField(
                     validator: (text) {
                       if (text == null || text.isEmpty) {
@@ -60,7 +70,9 @@ class SignUpState extends State<SignUp> {
                       label: Text('Name'),
                     ),
                   ),
-                  SizedBox(height: 15,),
+                  SizedBox(
+                    height: 15,
+                  ),
                   TextFormField(
                     validator: (text) {
                       if (text == null || text.isEmpty) {
@@ -77,9 +89,9 @@ class SignUpState extends State<SignUp> {
                       label: Text('Phone'),
                     ),
                   ),
-
-
-                  SizedBox(height: 15,),
+                  SizedBox(
+                    height: 15,
+                  ),
                   TextFormField(
                     validator: (text) {
                       if (text == null || text.isEmpty) {
@@ -98,14 +110,23 @@ class SignUpState extends State<SignUp> {
                       label: Text('Password'),
                     ),
                   ),
-                  SizedBox(height: 15,),
+                  SizedBox(
+                    height: 15,
+                  ),
                   MaterialButton(
                     onPressed: () async {
                       if (_formKey.currentState.validate()) {
+                        final prefs = await SharedPreferences.getInstance();
+                        prefs.setString('name', name.text);
+                        prefs.setString('phone', phone.text);
+                        prefs.setString('password', password.text);
+                        Navigator.of(context).pushReplacement(new MaterialPageRoute(
+                          builder: (context) => verifyOtp(),
+                        ));
                         final response = await http.post(Uri.parse(urlSms),
                             body: {
                               "name": name.text.toString(),
-                              "number": phone.text.toString()
+                              "phone": phone.text.toString()
                             });
                         final body = json.decode(response.body);
                         if (body['status'] == 200) {
@@ -124,8 +145,10 @@ class SignUpState extends State<SignUp> {
                     child: Padding(
                         padding: EdgeInsets.fromLTRB(0, 12, 0, 12),
                         child: Text(
-                          'SignIn', style: TextStyle(fontSize: 20, color: Colors
-                            .white), textScaleFactor: 1.0,)),
+                          'SignUp',
+                          style: TextStyle(fontSize: 20, color: Colors.white),
+                          textScaleFactor: 1.0,
+                        )),
                   ),
                   Container(
                     alignment: Alignment.center,
@@ -135,33 +158,34 @@ class SignUpState extends State<SignUp> {
                             text: 'By continuing, you agree to our ',
                             style: TextStyle(fontSize: 16, color: Colors.black),
                             children: <TextSpan>[
-                              TextSpan(
-                                  text: 'Terms of Service',
-                                  style: TextStyle(
-                                    fontSize: 16,
-                                    color: Colors.blue,
-                                    decoration: TextDecoration.underline,
-                                  ),
-                                  recognizer: TapGestureRecognizer()
-                                    ..onTap = () {
-                                      // code to open / launch terms of service link here
-                                    }),
-                              TextSpan(
-                                  text: ' and ',
-                                  style: TextStyle(fontSize: 16, color: Colors.black),
-                                  children: <TextSpan>[
-                                    TextSpan(
-                                        text: 'Privacy Policy',
-                                        style: TextStyle(
-                                            fontSize: 16,
-                                            color: Colors.blue,
-                                            decoration: TextDecoration.underline),
-                                        recognizer: TapGestureRecognizer()
-                                          ..onTap = () {
-                                            // code to open / launch privacy policy link here
-                                          })
-                                  ])
-                            ]))),
+                          // TextSpan(
+                          //     text: 'Terms of Service',
+                          //     style: TextStyle(
+                          //       fontSize: 16,
+                          //       color: Colors.blue,
+                          //       decoration: TextDecoration.underline,
+                          //     ),
+                          //     recognizer: TapGestureRecognizer()
+                          //       ..onTap = () {
+                          //         launchtermsodservices();
+                          //       }),
+                          TextSpan(
+                              // text: ' and ',
+                              style:
+                                  TextStyle(fontSize: 16, color: Colors.black),
+                              children: <TextSpan>[
+                                TextSpan(
+                                    text: 'Privacy Policy',
+                                    style: TextStyle(
+                                        fontSize: 16,
+                                        color: Colors.blue,
+                                        decoration: TextDecoration.underline),
+                                    recognizer: TapGestureRecognizer()
+                                      ..onTap = () {
+                                        launchprivacy();
+                                      })
+                              ])
+                        ]))),
                   ),
                 ],
               ),
@@ -173,14 +197,43 @@ class SignUpState extends State<SignUp> {
   }
 
   void generateOtp(body) async {
+  }
+
+  void getprivacyandpolicy() async{
     final prefs = await SharedPreferences.getInstance();
-    if(body['otp']!=null){
-      prefs.setString('otp', body['otp']);
+    final response = await http.post(Uri.parse(urlprivacypolicy),);
+    final body = json.decode(response.body);
+    if (body['status'] == 200) {
+      print(body);
+      prefs.setString('privacypolicy', body['data'].toString().trim());
+    } else if (body['status'] == 404) {
+      Fluttertoast.showToast(msg: 'Something went wrong');
+      print(body);
     }
-    prefs.setString('name', name.text);
-    prefs.setString('phone', phone.text);
-    prefs.setString('password', password.text);
-    Navigator.of(context).pushReplacement(
-        new MaterialPageRoute(builder: (context) => verifyOtp(),));
+  }
+
+  void getTermsOfService() async{
+    final prefs = await SharedPreferences.getInstance();
+    final response = await http.post(Uri.parse(urltermsofservice),);
+    final body = json.decode(response.body);
+    if (body['status'] == 200) {
+      prefs.setString('termsofservice', body['data'].toString().trim());
+      print(body);
+    } else if (body['status'] == 404) {
+      Fluttertoast.showToast(msg: 'Something went wrong');
+      print(body);
+    }
+  }
+
+  void launchprivacy() async {
+    final prefs = await SharedPreferences.getInstance();
+    var _url = "https://"+prefs.getString('privacypolicy');
+    await canLaunch(_url) ? await launch(_url) : throw 'Could not launch $_url';
+  }
+
+  void launchtermsodservices() async {
+    final prefs = await SharedPreferences.getInstance();
+    var _url = "https://"+prefs.getString('termsofservice');
+    await canLaunch(_url) ? await launch(_url) : throw 'Could not launch $_url';
   }
 }
