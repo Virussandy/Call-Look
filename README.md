@@ -70,7 +70,7 @@ If you want to contribute:
 4. Push to your fork and submit a pull request
 
 ## Support
-For any queries, contact **support@calllook.com**.
+For any queries, contact **sandeepks.jsr@gmail.com**.
 
 ## License
 This project is licensed under the **MIT License**.
