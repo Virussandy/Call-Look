@@ -1,11 +1,19 @@
 # Call Look App
 
-![Call Look Banner](screenshots/banner.png)
+![Call Look Banner](https://github.com/Virussandy/Call-Look/blob/aa9ad8e2e3c34feb4badc9d23b11f18412d731d6/Screenshot/banner.png)
 
 ## Screenshots
-| Home Screen | Call Logs | Contacts |
-|------------|------------|------------|
-| ![Home](https://github.com/Virussandy/Call-Look/blob/aa9ad8e2e3c34feb4badc9d23b11f18412d731d6/Screenshot/1.png) | ![Call Logs](screenshots/call_logs.png) | ![Contacts](screenshots/contacts.png) |
+| Splash Screen | Login |
+|------------|------------|
+| ![Splash Screen](https://github.com/Virussandy/Call-Look/blob/aa9ad8e2e3c34feb4badc9d23b11f18412d731d6/Screenshot/1.png) | ![Login](https://github.com/Virussandy/Call-Look/blob/aa9ad8e2e3c34feb4badc9d23b11f18412d731d6/Screenshot/1.png) | ![Dialer](https://github.com/Virussandy/Call-Look/blob/aa9ad8e2e3c34feb4badc9d23b11f18412d731d6/Screenshot/5.png) |
+
+|  Dialer | Side Navigation |
+|------------|------------|
+| ![Dialer](https://github.com/Virussandy/Call-Look/blob/aa9ad8e2e3c34feb4badc9d23b11f18412d731d6/Screenshot/3.png) | ![Side Navigation](https://github.com/Virussandy/Call-Look/blob/aa9ad8e2e3c34feb4badc9d23b11f18412d731d6/Screenshot/4.png)
+
+|  SignUp |
+|------------|
+| ![SignUp](https://github.com/Virussandy/Call-Look/blob/aa9ad8e2e3c34feb4badc9d23b11f18412d731d6/Screenshot/2.png) |
 
 ## App Overview
 Call Look is a feature-rich Flutter application that provides a seamless experience for managing call logs, contacts, and dialer functionalities. It allows users to view and manage their call history, initiate calls directly from the app, and interact with contacts efficiently.
