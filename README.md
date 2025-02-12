@@ -5,7 +5,7 @@
 ## Screenshots
 | Home Screen | Call Logs | Contacts |
 |------------|------------|------------|
-| ![Home](screenshot/1.png) | ![Call Logs](screenshots/call_logs.png) | ![Contacts](screenshots/contacts.png) |
+| ![Home](https://github.com/Virussandy/Call-Look/blob/aa9ad8e2e3c34feb4badc9d23b11f18412d731d6/Screenshot/1.png) | ![Call Logs](screenshots/call_logs.png) | ![Contacts](screenshots/contacts.png) |
 
 ## App Overview
 Call Look is a feature-rich Flutter application that provides a seamless experience for managing call logs, contacts, and dialer functionalities. It allows users to view and manage their call history, initiate calls directly from the app, and interact with contacts efficiently.
