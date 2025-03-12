@@ -5,7 +5,7 @@
 ## Screenshots
 | Splash Screen | Login |
 |------------|------------|
-| ![Splash Screen](https://github.com/Virussandy/Call-Look/blob/aa9ad8e2e3c34feb4badc9d23b11f18412d731d6/Screenshot/1.png) | ![Login](https://github.com/Virussandy/Call-Look/blob/aa9ad8e2e3c34feb4badc9d23b11f18412d731d6/Screenshot/1.png) | ![Dialer](https://github.com/Virussandy/Call-Look/blob/aa9ad8e2e3c34feb4badc9d23b11f18412d731d6/Screenshot/5.png) |
+| ![Splash Screen](https://github.com/Virussandy/Call-Look/blob/aa9ad8e2e3c34feb4badc9d23b11f18412d731d6/Screenshot/1.png) | ![Login](https://github.com/Virussandy/Call-Look/blob/aa9ad8e2e3c34feb4badc9d23b11f18412d731d6/Screenshot/05.png) 
 
 |  Dialer | Side Navigation |
 |------------|------------|
